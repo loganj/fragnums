@@ -10,7 +10,7 @@ public class BackstackFrame implements Parcelable {
 
   public final static Creator<BackstackFrame> CREATOR = new Creator<BackstackFrame>() {
     @Override public BackstackFrame createFromParcel(Parcel source) {
-      Screen screen = Screen.values()[source.readInt()];
+      @Screen int screen = source.readInt();
       Bundle bundle = source.readBundle();
       SparseArray<Parcelable> viewState = bundle.getSparseParcelableArray("viewState");
       return new BackstackFrame(screen, viewState);
@@ -21,16 +21,16 @@ public class BackstackFrame implements Parcelable {
     }
   };
 
-  public final Screen screen;
+  @Screen public final int screen;
 
   private final SparseArray<Parcelable> viewState;
 
-  private BackstackFrame(Screen screen, SparseArray<Parcelable> viewState) {
+  private BackstackFrame(@Screen int screen, SparseArray<Parcelable> viewState) {
     this.screen = screen;
     this.viewState = viewState;
   }
 
-  public BackstackFrame(Screen screen, View view) {
+  public BackstackFrame(@Screen int screen, View view) {
     this.screen = screen;
     viewState = new SparseArray<>();
     view.saveHierarchyState(viewState);
@@ -45,7 +45,7 @@ public class BackstackFrame implements Parcelable {
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
-    dest.writeInt(screen.ordinal());
+    dest.writeInt(screen);
     Bundle bundle = new Bundle();
     bundle.putSparseParcelableArray("viewState", viewState);
     dest.writeBundle(bundle);
